@@ -28,15 +28,11 @@ def filterBySubject(subject):
 
 def filterBySchool(school):
         currentSchool = scores[scores['School Name'] == school].iloc[0]
-        schoolScores = {
-                        'math': currentSchool['Average Score (SAT Math)'],
-                        'reading': currentSchool['Average Score (SAT Reading)'],
-                        'writing': currentSchool['Average Score (SAT Writing)'],
+        return {
+                'math': currentSchool['Average Score (SAT Math)'],
+                'reading': currentSchool['Average Score (SAT Reading)'],
+                'writing': currentSchool['Average Score (SAT Writing)'],
         }
-        print(currentSchool)
-        print('>>')
-        print(currentSchool['Average Score (SAT Reading)'])
-        return schoolScores
 
 app = Flask(__name__)
 
@@ -47,7 +43,6 @@ def send_scores():
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
     elif 'school' in request.args:
-        print('school stuff')
         response = jsonify(filterBySchool(request.args.get('school')))
         response.headers.add('Access-Control-Allow-Origin', '*')
         return response
