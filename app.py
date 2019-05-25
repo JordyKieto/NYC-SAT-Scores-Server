@@ -4,7 +4,7 @@ import math
 
 scores = pd.read_csv('scores.csv')
 
-def filterBy(subject):
+def filterBySubject(subject):
         data = {
                 'scores': 
                         {'black': [], 'asian':[], 'white':[], 'hispanic':[], 
@@ -26,11 +26,28 @@ def filterBy(subject):
                         i += 1
         return data
 
+def filterBySchool(school):
+        currentSchool = scores[scores['School Name'] == school].iloc[0]
+        schoolScores = {
+                        'math': currentSchool['Average Score (SAT Math)'],
+                        'reading': currentSchool['Average Score (SAT Reading)'],
+                        'writing': currentSchool['Average Score (SAT Writing)'],
+        }
+        print(currentSchool)
+        print('>>')
+        print(currentSchool['Average Score (SAT Reading)'])
+        return schoolScores
+
 app = Flask(__name__)
 
 @app.route("/scores")
 def send_scores():
-    filteredData = filterBy(request.args.get('subject'))
-    response = jsonify(filteredData)
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+    if 'subject' in request.args:
+        response = jsonify(filterBySubject(request.args.get('subject')))
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+    elif 'school' in request.args:
+        print('school stuff')
+        response = jsonify(filterBySchool(request.args.get('school')))
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
