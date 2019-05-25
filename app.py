@@ -31,6 +31,8 @@ app = Flask(__name__)
 @app.route("/scores")
 def send_scores():
     filteredData = filterBy(request.args.get('subject'))
-    return jsonify(filteredData)
+    response = jsonify(filteredData)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 # FLASK_APP=app.py flask run
