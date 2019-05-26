@@ -26,10 +26,12 @@ ___
     >REACT_APP_SAT_PROXY=http://localhost:5000/ npm start
 
 ## Technologies Used
+* Python
 * Pandas 
 * Flask
-* React / Redux
+* Pytest
 
 ## Future Updates
 * Create a regression model to predict SAT score from demographic makeup, and visualization
 * Write unit tests for scores route
+* Remove duplicate data in Filter function
