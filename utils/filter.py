@@ -1,7 +1,10 @@
 import pandas as pd
 
 class Filter:
-    def bySubject(scores, subject):
+    def __init__(self, scores):
+            self.scores = scores
+
+    def bySubject(self, subject):
         data = {
                 'scores': 
                         {'black': [], 'asian':[], 'white':[], 'hispanic':[], 'other': [],
@@ -9,10 +12,9 @@ class Filter:
                 'schools': 
                         []
         }
-
         i = 0
         subjectStr = 'Average Score (SAT ' + subject + ')'
-        for index, row in scores.iterrows():
+        for index, row in self.scores.iterrows():
                 if not pd.isnull(row['Percent Black']) and not pd.isnull(row[subjectStr]) and not pd.isnull(row['Percent White']) and not pd.isnull(row['Percent Asian']):
                         percentBlack = float(row['Percent Black'].strip('%'))
                         percentAsian = float(row['Percent Asian'].strip('%'))
@@ -31,8 +33,8 @@ class Filter:
                         i += 1
         return data
     
-    def bySchool(scores, school):
-        currentSchool = scores[scores['School Name'] == school].iloc[0]
+    def bySchool(self, school):
+        currentSchool = self.scores[self.scores['School Name'] == school].iloc[0]
         return {
                 'math': currentSchool['Average Score (SAT Math)'],
                 'reading': currentSchool['Average Score (SAT Reading)'],
