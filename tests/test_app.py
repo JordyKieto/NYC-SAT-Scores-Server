@@ -10,6 +10,8 @@ def client():
 def test_subjectQuery(client):
     data = client.get('/scores?subject=Math').get_json()
     assert ('scores' in data and 'schools' in data) == True
+    assert len(data['schools']) > 0
+    assert len(data['scores']['black']) == len(data['schools'])
 
 def test_schoolQuery(client):
     data = client.get('/scores?school=Essex Street Academy').get_json()
