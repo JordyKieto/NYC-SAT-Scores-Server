@@ -18,31 +18,32 @@ class Filter:
         "schools": []
         }
         subjectStr = 'Average Score (SAT ' + subject + ')'
-        def appendValues(data, values, i):
+        def appendValues(data, values):
                 percentOther = 100
                 for index, race in enumerate(races):
                         if race == 'other':
                                 if percentOther < 0:
                                         percentOther = 0
-                                data['scores'][race].append({'x': percentOther, 'y': values['score'], 'index': i})
+                                data['scores'][race].append({'x': percentOther, 'y': values['score'], 'index': values['index']})
                         else:
                                 percentOther -= values[rowCols[index]]
-                                data['scores'][race].append({'x': values[rowCols[index]], 'y': values['score'], 'index': i})
+                                data['scores'][race].append({'x': values[rowCols[index]], 'y': values['score'], 'index': values['index']})
                 data['schools'].append(values['school'])
                 return data
 
-        def extractValues(row, subject):
+        def extractValues(row, subject, i):
                 rowData = {}
                 for col in rowCols:
                         rowData[col] = float(row[col].strip('%'))
                 rowData['school'] = row['School Name']
                 rowData['score'] = row[subject]
+                rowData['index'] = i
                 return rowData
 
         for index, row in self.scores.iterrows():
-                        appendValues(responseData, extractValues(row, subjectStr), index)
+                        appendValues(responseData, extractValues(row, subjectStr, index))
         return responseData
-    
+
     def bySchool(self, school):
         response = {}
         currentSchool = self.scores[self.scores['School Name'] == school].iloc[0]
