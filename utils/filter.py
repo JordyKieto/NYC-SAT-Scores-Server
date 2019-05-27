@@ -1,6 +1,8 @@
 import pandas as pd
 
 rowCols = ['Percent Black', 'Percent White', 'Percent Asian', 'Percent Hispanic']
+subjects = ['math', 'reading', 'writing']
+subjectCols = ['Average Score (SAT Math)', 'Average Score (SAT Reading)', 'Average Score (SAT Writing)']
 neededCols = [rowCols[:1][0], 'Average Score (SAT Math)']
 races = ['black', 'white', 'asian', 'hispanic', 'other']
 
@@ -16,7 +18,6 @@ class Filter:
         "schools": []
         }
         subjectStr = 'Average Score (SAT ' + subject + ')'
-        
         def appendValues(data, values, i):
                 percentOther = 100
                 for index, race in enumerate(races):
@@ -32,7 +33,7 @@ class Filter:
 
         def extractValues(row, subject):
                 rowData = {}
-                for col in rowCols[:4]:
+                for col in rowCols:
                         rowData[col] = float(row[col].strip('%'))
                 rowData['school'] = row['School Name']
                 rowData['score'] = row[subject]
@@ -43,9 +44,8 @@ class Filter:
         return responseData
     
     def bySchool(self, school):
+        response = {}
         currentSchool = self.scores[self.scores['School Name'] == school].iloc[0]
-        return {
-                'math': currentSchool['Average Score (SAT Math)'],
-                'reading': currentSchool['Average Score (SAT Reading)'],
-                'writing': currentSchool['Average Score (SAT Writing)'],
-        }
+        for index, sub in enumerate(subjects):
+                response[sub] = currentSchool[subjectCols[index]]
+        return response
