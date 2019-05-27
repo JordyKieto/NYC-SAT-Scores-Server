@@ -1,37 +1,46 @@
 import pandas as pd
 
+rowCols = ['Percent Black', 'Percent White', 'Percent Asian', 'Percent Hispanic']
+neededCols = [rowCols[:1][0], 'Average Score (SAT Math)']
+races = ['black', 'white', 'asian', 'hispanic', 'other']
+
 class Filter:
     def __init__(self, scores):
+            for col in neededCols:
+                scores = scores[pd.notnull(scores[col])]
             self.scores = scores
 
     def bySubject(self, subject):
-        data = {
-                'scores': 
-                        {'black': [], 'asian':[], 'white':[], 'hispanic':[], 'other': [],
-                }, 
-                'schools': 
-                        []
+        responseData = {
+        "scores": { "black": [], "asian": [], "white": [], "hispanic": [], "other": [] },
+        "schools": []
         }
-        i = 0
         subjectStr = 'Average Score (SAT ' + subject + ')'
+        
+        def appendValues(data, values, i):
+                percentOther = 100
+                for index, race in enumerate(races):
+                        if race == 'other':
+                                if percentOther < 0:
+                                        percentOther = 0
+                                data['scores'][race].append({'x': percentOther, 'y': values['score'], 'index': i})
+                        else:
+                                percentOther -= values[rowCols[index]]
+                                data['scores'][race].append({'x': values[rowCols[index]], 'y': values['score'], 'index': i})
+                data['schools'].append(values['school'])
+                return data
+
+        def extractValues(row, subject):
+                rowData = {}
+                for col in rowCols[:4]:
+                        rowData[col] = float(row[col].strip('%'))
+                rowData['school'] = row['School Name']
+                rowData['score'] = row[subject]
+                return rowData
+
         for index, row in self.scores.iterrows():
-                if not pd.isnull(row['Percent Black']) and not pd.isnull(row[subjectStr]) and not pd.isnull(row['Percent White']) and not pd.isnull(row['Percent Asian']):
-                        percentBlack = float(row['Percent Black'].strip('%'))
-                        percentAsian = float(row['Percent Asian'].strip('%'))
-                        percentWhite = float(row['Percent White'].strip('%'))
-                        percentHispanic = float(row['Percent Hispanic'].strip('%'))
-                        percentOther = 100 - percentBlack - percentAsian - percentWhite - percentHispanic
-                        subjectScore = row[subjectStr]
-                        if percentOther < 0:
-                                percentOther = 0
-                        data['scores']['black'].append({'x': percentBlack, 'y': subjectScore, 'index': i})
-                        data['scores']['asian'].append({'x': percentAsian, 'y': subjectScore, 'index': i})
-                        data['scores']['white'].append({'x': percentWhite, 'y': subjectScore, 'index': i})
-                        data['scores']['hispanic'].append({'x': percentHispanic, 'y': subjectScore, 'index': i})
-                        data['scores']['other'].append({'x': percentOther, 'y': subjectScore, 'index': i})
-                        data['schools'].append(row['School Name'])
-                        i += 1
-        return data
+                        appendValues(responseData, extractValues(row, subjectStr), index)
+        return responseData
     
     def bySchool(self, school):
         currentSchool = self.scores[self.scores['School Name'] == school].iloc[0]
