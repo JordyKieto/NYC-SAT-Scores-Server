@@ -25,6 +25,9 @@ ___
 * run 
     >REACT_APP_SAT_PROXY=http://localhost:5000/ npm start
 
+### *Database
+* Connection String -> Server=localhost;Database=master;Trusted_Connection=True;
+
 ## Technologies Used
 * Python
 * Pandas 
@@ -34,4 +37,5 @@ ___
 ## Future Updates
 * Create a regression model to predict SAT score from demographic makeup, and visualization
 * Write unit tests for scores route
+* Replace iterrows with df apply
 * Remove duplicate data in Filter function
