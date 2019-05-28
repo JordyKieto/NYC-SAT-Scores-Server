@@ -17,6 +17,6 @@ def send_scores():
 
 @app.route("/matrix")
 def send_matrix():
-    res = send_file('matrix.svg', mimetype="image/svg")
+    res = send_file('matrix.svg', mimetype="image/svg+xml")
     res.headers.add('Access-Control-Allow-Origin', '*')
     return res
