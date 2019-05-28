@@ -40,8 +40,8 @@ class Filter:
                 rowData['index'] = i
                 return rowData
 
-        for index, row in self.scores.iterrows():
-                        appendValues(responseData, extractValues(row, subjectStr, index))
+        for index, row in enumerate(self.scores.iterrows()):
+                        appendValues(responseData, extractValues(row[1], subjectStr, index))
         return responseData
 
     def bySchool(self, school):
