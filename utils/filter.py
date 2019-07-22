@@ -1,52 +1,41 @@
-import pandas as pd
-
-rowCols = ['Percent Black', 'Percent White', 'Percent Asian', 'Percent Hispanic']
-subjects = ['math', 'reading', 'writing']
-subjectCols = ['Average Score (SAT Math)', 'Average Score (SAT Reading)', 'Average Score (SAT Writing)']
-neededCols = [rowCols[:1][0], 'Average Score (SAT Math)']
+import sqlite3
+from sqlite3 import Error
 races = ['black', 'white', 'asian', 'hispanic', 'other']
+raceToIndex = {'black': 2, 'asian': 3, 'white': 4, 'hispanic': 5, 'other': 6}
 
 class Filter:
-    def __init__(self, scores):
-            for col in neededCols:
-                scores = scores[pd.notnull(scores[col])]
-            self.scores = scores
+    def __init__(self, db_file):
+        try:
+                self.conn = sqlite3.connect(db_file, check_same_thread=False)
+                print(sqlite3.version)
+        except Error as e:
+                print(e)
 
     def bySubject(self, subject):
         responseData = {
         "scores": { "black": [], "asian": [], "white": [], "hispanic": [], "other": [] },
         "schools": []
         }
-        subjectStr = 'Average Score (SAT ' + subject + ')'
-        def appendValues(data, values):
-                percentOther = 100
-                for index, race in enumerate(races):
-                        if race == 'other':
-                                if percentOther < 0:
-                                        percentOther = 0
-                                data['scores'][race].append({'x': percentOther, 'y': values['score'], 'index': values['index']})
-                        else:
-                                percentOther -= values[rowCols[index]]
-                                data['scores'][race].append({'x': values[rowCols[index]], 'y': values['score'], 'index': values['index']})
-                data['schools'].append(values['school'])
-                return data
-
-        def extractValues(row, subject, i):
-                rowData = {}
-                for col in rowCols:
-                        rowData[col] = float(row[col].strip('%'))
-                rowData['school'] = row['School Name']
-                rowData['score'] = row[subject]
-                rowData['index'] = i
-                return rowData
-
-        for index, (_, row) in enumerate(self.scores.iterrows()):
-                        appendValues(responseData, extractValues(row, subjectStr, index))
+        sql = f""" 
+        SELECT name, {subject.lower()}_score, percent_black, percent_asian, percent_white, percent_hispanic, percent_other 
+        from schools 
+        """
+        curr = self.conn.cursor()
+        curr.execute(sql)
+        rows = curr.fetchall()
+        for index, row in enumerate(rows):
+                responseData['schools'].append(row[0])
+                for race in races:
+                        responseData['scores'][race].append({'x': row[raceToIndex[race]], 'y': row[1], 'index': index})
+                
         return responseData
 
     def bySchool(self, school):
-        response = {}
-        currentSchool = self.scores[self.scores['School Name'] == school].iloc[0]
-        for index, sub in enumerate(subjects):
-                response[sub] = currentSchool[subjectCols[index]]
-        return response
+        sql = """ 
+        SELECT math_score, reading_score, writing_score from schools 
+        WHERE name=?
+        """
+        curr = self.conn.cursor()
+        curr.execute(sql, (school,))
+        row = curr.fetchall()
+        return {"math": row[0][0], "reading": row[0][1], "writing": row[0][2]}
