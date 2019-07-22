@@ -1,10 +1,9 @@
+
 from flask import Flask, request, send_file
-import pandas as pd
-import math
 from utils.filter import Filter
 from utils.formatResponse import formatResponse
 
-filter = Filter(pd.read_csv('scores.csv'))
+filter = Filter('pythonsqlite.db')
 
 app = Flask(__name__)
 
