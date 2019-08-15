@@ -13,7 +13,7 @@
 * run 
     >pip install -r requirements.txt
 * run 
-    >FLASK_APP=app.py flask run
+    >bash start_server.sh
 ##### __Testing__
 * run 
     >pytest
@@ -23,7 +23,7 @@ ___
 * run 
     >npm install
 * run 
-    >REACT_APP_SAT_PROXY=http://localhost:5000/ npm start
+    >bash start_client *host*
 
 ### *Database
 * Connection String -> Server=localhost;Database=master;Trusted_Connection=True;

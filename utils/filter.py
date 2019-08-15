@@ -1,7 +1,9 @@
+import os, sys
 import sqlite3
 from sqlite3 import Error
-races = ['black', 'white', 'asian', 'hispanic', 'other']
-raceToIndex = {'black': 2, 'asian': 3, 'white': 4, 'hispanic': 5, 'other': 6}
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from common import conditional_map
+from .formatScores import formatScores
 
 class Filter:
     def __init__(self, db_file):
@@ -12,10 +14,6 @@ class Filter:
                 print(e)
 
     def bySubject(self, subject):
-        responseData = {
-        "scores": { "black": [], "asian": [], "white": [], "hispanic": [], "other": [] },
-        "schools": []
-        }
         sql = f""" 
         SELECT name, {subject.lower()}_score, percent_black, percent_asian, percent_white, percent_hispanic, percent_other 
         from schools 
@@ -23,12 +21,7 @@ class Filter:
         curr = self.conn.cursor()
         curr.execute(sql)
         rows = curr.fetchall()
-        for index, row in enumerate(rows):
-                responseData['schools'].append(row[0])
-                for race in races:
-                        responseData['scores'][race].append({'x': row[raceToIndex[race]], 'y': row[1], 'index': index})
-                
-        return responseData
+        return formatScores(rows)
 
     def bySchool(self, school):
         sql = """ 
@@ -39,3 +32,15 @@ class Filter:
         curr.execute(sql, (school,))
         row = curr.fetchall()
         return {"math": row[0][0], "reading": row[0][1], "writing": row[0][2]}
+    
+    def byScore(self, score, conditional, subject):
+        condition = conditional_map[conditional]
+        sql = f""" 
+        SELECT name, {subject.lower()}_score, percent_black, percent_asian, percent_white, percent_hispanic, percent_other
+        from schools
+        WHERE {subject.lower()}_score{condition}{score}
+        """
+        curr = self.conn.cursor()
+        curr.execute(sql)
+        rows = curr.fetchall()
+        return formatScores(rows)

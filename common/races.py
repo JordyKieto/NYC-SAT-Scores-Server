@@ -1,0 +1,1 @@
+races = ['black', 'white', 'asian', 'hispanic', 'other']

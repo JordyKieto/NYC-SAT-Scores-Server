@@ -1,0 +1,1 @@
+raceToIndex = {'black': 2, 'asian': 3, 'white': 4, 'hispanic': 5, 'other': 6}
