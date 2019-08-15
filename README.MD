@@ -23,7 +23,7 @@ ___
 * run 
     >npm install
 * run 
-    >bash start_client *host*
+    >bash start_server *host*
 
 ### *Database
 * Connection String -> Server=localhost;Database=master;Trusted_Connection=True;
@@ -33,9 +33,13 @@ ___
 * Pandas 
 * Flask
 * Pytest
+* Sqlite3
 
 ## Future Updates
-* Create a regression model to predict SAT score from demographic makeup, and visualization
-* Write unit tests for scores route
-* Replace iterrows with df apply
-* Remove duplicate data in Filter function
+* ~~Create a regression model to predict SAT score from demographic makeup, and visualization~~
+* ~~Write unit tests for scores route~~
+* ~~Replace iterrows with df apply~~
+* ~~Remove duplicate data in Filter function~~
+* Unit tests for formatScores utility
+* Use reduce instead for enumerate for formatScores
+* Allow user input of data

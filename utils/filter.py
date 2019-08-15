@@ -33,12 +33,13 @@ class Filter:
         row = curr.fetchall()
         return {"math": row[0][0], "reading": row[0][1], "writing": row[0][2]}
     
-    def byScore(self, score, conditional, subject):
-        condition = conditional_map[conditional]
+    def byScore(self, req_args):
+        condition = conditional_map[req_args['conditional']]
+        subject = req_args['subject'].lower()
         sql = f""" 
-        SELECT name, {subject.lower()}_score, percent_black, percent_asian, percent_white, percent_hispanic, percent_other
+        SELECT name, {subject}_score, percent_black, percent_asian, percent_white, percent_hispanic, percent_other
         from schools
-        WHERE {subject.lower()}_score{condition}{score}
+        WHERE {subject}_score{condition}{req_args['score']}
         """
         curr = self.conn.cursor()
         curr.execute(sql)
