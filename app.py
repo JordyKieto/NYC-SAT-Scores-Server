@@ -1,6 +1,7 @@
 
 from flask import Flask, request, send_file
-from util import Filter, formatResponse
+from utils.filter import Filter
+from utils.formatResponse import formatResponse
 
 filter = Filter('pythonsqlite.db')
 app = Flask(__name__)
