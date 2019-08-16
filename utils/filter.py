@@ -4,6 +4,7 @@ from sqlite3 import Error
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from common import conditional_map
 from .formatScores import formatScores
+import pdb
 
 class Filter:
     def __init__(self, db_file):

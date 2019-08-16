@@ -13,7 +13,7 @@
 * run 
     >pip install -r requirements.txt
 * run 
-    >bash start_server.sh
+    >start_server.sh
 ##### __Testing__
 * run 
     >pytest
@@ -23,7 +23,7 @@ ___
 * run 
     >npm install
 * run 
-    >bash start_server *host*
+    >start_server.sh *host*
 
 ### *Database
 * Connection String -> Server=localhost;Database=master;Trusted_Connection=True;

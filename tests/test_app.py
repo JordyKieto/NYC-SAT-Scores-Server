@@ -6,6 +6,9 @@ import pdb
 import random
 import xml.etree.ElementTree as ET
 from common import conditional_map
+from utils.formatScores import formatScores
+from utils.formatResponse import formatResponse
+from flask import jsonify, Flask
 
 @pytest.fixture
 def client():
@@ -40,3 +43,22 @@ def test_score_filter_query(client):
     data = client.get(url).get_json()['scores']
     data =  data[random.choice(list(data.keys()))]
     assert all(eval(f"{s['y']} {conditional_map[conditional]} {float(score)}") for s in data)
+
+def test_format_scores():
+    row = ('New Explorations into Science, Technology and Math High School', 13.3, 38.5, 28.6, 18.0, 1.6000000000000014, 657.0, 601.0, 601.0)
+    result = formatScores([row])
+    assert all((isinstance(result['schools'], list), isinstance(result['schools'], list)))
+
+def test_format_response(client):
+    test_app = Flask(__name__)
+    with test_app.app_context():
+        @formatResponse
+        def test_func():
+            return ({'height': 100})
+        response = test_func()
+        pdb.set_trace()
+        assert all([
+            str(response.headers) == "Content-Type: application/json\r\nContent-Length: 15\r\nAccess-Control-Allow-Origin: *\r\n\r\n",
+            response.is_json,
+            response.get_json() == {'height': 100}
+        ])
