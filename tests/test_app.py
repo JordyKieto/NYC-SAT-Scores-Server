@@ -8,7 +8,6 @@ import xml.etree.ElementTree as ET
 from common import conditional_map
 from utils.formatScores import formatScores
 from utils.formatResponse import formatResponse
-from flask import jsonify, Flask
 
 @pytest.fixture
 def client():
@@ -50,13 +49,11 @@ def test_format_scores():
     assert all((isinstance(result['schools'], list), isinstance(result['schools'], list)))
 
 def test_format_response(client):
-    test_app = Flask(__name__)
-    with test_app.app_context():
+    with app.app.app_context():
         @formatResponse
         def test_func():
             return ({'height': 100})
         response = test_func()
-        pdb.set_trace()
         assert all([
             str(response.headers) == "Content-Type: application/json\r\nContent-Length: 15\r\nAccess-Control-Allow-Origin: *\r\n\r\n",
             response.is_json,
