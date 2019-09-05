@@ -1,7 +1,7 @@
 conditional_map = {
     'gt': '>',
     'lt': '<',
-    'eq': '=',
+    'eq': '==',
     'gte': '>=',
     'lte': '<=',
 }

@@ -1,8 +1,4 @@
-
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from common import races, raceToIndex
-import pdb
 from functools import reduce
 
 def formatScores(scores):

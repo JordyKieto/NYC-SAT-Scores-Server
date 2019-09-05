@@ -1,10 +1,11 @@
 
 from flask import Flask, request, send_file
-from utils.filter import Filter
-from utils.formatResponse import formatResponse
+from utils import Filter, formatResponse, formatPredictionInput
+import pickle
 
 filter = Filter('pythonsqlite.db')
 app = Flask(__name__)
+sat_model = pickle.load(open('primary_sat_model.sav', 'rb'))
 
 @app.route("/scores")
 @formatResponse
@@ -21,3 +22,10 @@ def send_scores():
 def send_matrix():
     res = send_file('matrix.svg', mimetype="image/svg+xml")
     return res
+
+@app.route("/predict")
+@formatResponse
+def predict():
+    input = formatPredictionInput(request.args)
+    prediction = sat_model.predict(input)
+    return list(prediction)

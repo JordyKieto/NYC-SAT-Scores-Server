@@ -1,9 +1,7 @@
-import os, sys
 import sqlite3
 from sqlite3 import Error
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from common import conditional_map
-from .formatScores import formatScores
+from . import formatScores, formatScore
 import pdb
 
 class Filter:
@@ -32,7 +30,7 @@ class Filter:
         curr = self.conn.cursor()
         curr.execute(sql, (school,))
         row = curr.fetchall()
-        return {"math": row[0][0], "reading": row[0][1], "writing": row[0][2]}
+        return formatScore(row)
     
     def byScore(self, req_args):
         condition = conditional_map[req_args['conditional']]
