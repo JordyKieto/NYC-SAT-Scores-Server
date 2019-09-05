@@ -59,3 +59,7 @@ def test_format_response(client):
             response.is_json,
             response.get_json() == {'height': 100}
         ])
+
+def test_predict_score(client):
+    data = client.get("http://127.0.0.1:5000/predict?Percent Black=25&Percent White=25&Percent Asian=25&Percent Hispanic=25&Percent Other=0&variance=1&Spent Per Student=100&Student enrollment=100&Manhattan=1&Staten=0&Bronx=0&Queens=0&Brooklyn=0").get_json()
+    assert data  ==  [594.5564164381447]
