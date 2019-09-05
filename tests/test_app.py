@@ -1,3 +1,4 @@
+
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pytest
@@ -6,8 +7,7 @@ import pdb
 import random
 import xml.etree.ElementTree as ET
 from common import conditional_map
-from utils.formatScores import formatScores
-from utils.formatResponse import formatResponse
+from utils import formatScores, formatResponse
 
 @pytest.fixture
 def client():

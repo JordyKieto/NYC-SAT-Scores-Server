@@ -1,9 +1,6 @@
 
 from flask import Flask, request, send_file
-from utils.filter import Filter
-from utils.formatResponse import formatResponse
-from utils.formatPredictionInput import formatPredictionInput
-
+from utils import Filter, formatResponse, formatPredictionInput
 import pickle
 
 filter = Filter('pythonsqlite.db')
@@ -29,6 +26,6 @@ def send_matrix():
 @app.route("/predict")
 @formatResponse
 def predict():
-    test = formatPredictionInput(request.args)
-    prediction = sat_model.predict(test)
+    input = formatPredictionInput(request.args)
+    prediction = sat_model.predict(input)
     return list(prediction)
