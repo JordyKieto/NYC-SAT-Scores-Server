@@ -3,7 +3,7 @@ from functools import reduce
 
 def formatScores(scores):
     responseData = {
-        "scores": { "black": [], "asian": [], "white": [], "hispanic": [], "other": [] },
+        "scores": {race: [] for race in races},
         "schools": []
     }
     def helper(acc, index):

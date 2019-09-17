@@ -6,7 +6,7 @@ import app
 import pdb
 import random
 import xml.etree.ElementTree as ET
-from common import conditional_map
+from common import conditional_map, subjects
 from utils import formatScores, formatResponse
 
 @pytest.fixture
@@ -41,6 +41,8 @@ def test_score_filter_query(client):
     url = f"/scores?subject={subject}&score={score}&conditional={conditional}"
     data = client.get(url).get_json()['scores']
     data =  data[random.choice(list(data.keys()))]
+    if not all(eval(f"{s['y']} {conditional_map[conditional]} {float(score)}") for s in data):
+        pdb.set_trace()
     assert all(eval(f"{s['y']} {conditional_map[conditional]} {float(score)}") for s in data)
 
 def test_format_scores():
