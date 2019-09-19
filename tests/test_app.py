@@ -63,5 +63,5 @@ def test_format_response(client):
         ])
 
 def test_predict_score(client):
-    data = client.get("http://127.0.0.1:5000/predict?Percent Black=25&Percent White=25&Percent Asian=25&Percent Hispanic=25&Percent Other=0&variance=1&Spent Per Student=100&Student enrollment=100&Manhattan=1&Staten=0&Bronx=0&Queens=0&Brooklyn=0").get_json()
-    assert data  ==  [594.5564164381447]
+    data = client.get("http://127.0.0.1:5000/predict?Percent Black=0&Percent White=0&Percent Asian=50&Percent Hispanic=50&Percent Other=0&Spent Per Student=1000&Student enrollment=100&Manhattan=1&Staten=0&Bronx=0&Queens=0&Brooklyn=0&Math=0&Reading=0&Writing=1").get_json()
+    assert data  ==  [398.6593559992836]
