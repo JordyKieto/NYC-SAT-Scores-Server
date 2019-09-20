@@ -1,4 +1,4 @@
-
+import sklearn
 from flask import Flask, request, send_file
 from utils import Filter, formatResponse, formatPredictionInput
 import pickle
