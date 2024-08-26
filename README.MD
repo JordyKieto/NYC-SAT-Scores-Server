@@ -45,3 +45,9 @@ ___
 * Unit tests for formatScores utility
 * Use reduce instead for enumerate for formatScores
 * Allow user input of data
+
+## Screenshots
+<p align="center">
+  <img src="001.png" width="350" title="hover text">
+  <img src="003.png" width="350" title="hover text">
+</p>
