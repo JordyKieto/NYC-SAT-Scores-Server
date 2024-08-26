@@ -1,7 +1,9 @@
 # NYC SAT DATA
 
+## [Model Training Notebook](https://github.com/JordyKieto/NYC-SAT-Scores-Server/blob/master/notebooks/Regression_Notebook.ipynb)
+
 ## Goal
-*  Provide analysis and visualization of SAT scores in New York city dataset
+I conducted an in-depth analysis of NYC SAT scores and racial demographics, training a predictive model to highlight disparities in the education system.  To empower broader access to these insights, I developed and deployed a full-stack web application where users can input relevant data and receive predicted scores, thereby fostering awareness and informing discussions on educational equity.
 
 ## How to Run Locally
 ### *Prerequisites
